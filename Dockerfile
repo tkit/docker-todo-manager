@@ -1,6 +1,12 @@
-#yum -y install nodejs
-#git clone -b server https://github.com/recruit-tech/todo-manager.git /usr/local/src
-#cd /usr/local/src/todo-manager
-#npm install
-#npm install express body-parser --save
-#npm start
+FROM node:6.10.2-alpine
+
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh && \
+    git clone -b server https://github.com/recruit-tech/todo-manager.git && \
+    apk del bash git openssh
+
+WORKDIR /todo-manager
+RUN npm set progress=false && npm install && npm install body-parser
+EXPOSE 3000
+
+CMD ["npm","start"]
